@@ -640,7 +640,7 @@ def learningcurve(learner, dataset, trials=10, sizes=None):
 #______________________________________________________________________________
 # The rest of this file gives datasets for machine learning problems.
 
-orings = DataSet(name='orings', target='Distressed',
+"""orings = DataSet(name='orings', target='Distressed',
                  attrnames="Rings Distressed Temp Pressure Flightnum")
 
 
@@ -651,12 +651,12 @@ zoo = DataSet(name='zoo', target='type', exclude=['name'],
 
 
 iris = DataSet(name="iris", target="class",
-               attrnames="sepal-len sepal-width petal-len petal-width class")
+               attrnames="sepal-len sepal-width petal-len petal-width class")"""
 
 #______________________________________________________________________________
 # The Restaurant example from Fig. 18.2
 
-def RestaurantDataSet(examples=None):
+"""def RestaurantDataSet(examples=None):
     "Build a DataSet of Restaurant waiting examples. [Fig. 18.3]"
     return DataSet(name='restaurant', target='Wait', examples=examples,
                    attrnames='Alternate Bar Fri/Sat Hungry Patrons Price '
@@ -668,24 +668,8 @@ def T(attrname, branches):
     branches = dict((value, (child if isinstance(child, DecisionFork)
                              else DecisionLeaf(child)))
                     for value, child in branches.items())
-    return DecisionFork(restaurant.attrnum(attrname), attrname, branches)
+    return DecisionFork(restaurant.attrnum(attrname), attrname, branches)"""
 
-Fig[18,2] = T('Patrons',
-             {'None': 'No', 'Some': 'Yes', 'Full':
-              T('WaitEstimate',
-                {'>60': 'No', '0-10': 'Yes',
-                 '30-60':
-                 T('Alternate', {'No':
-                                 T('Reservation', {'Yes': 'Yes', 'No':
-                                                   T('Bar', {'No':'No',
-                                                             'Yes':'Yes'})}),
-                                 'Yes':
-                                 T('Fri/Sat', {'No': 'No', 'Yes': 'Yes'})}),
-                 '10-30':
-                 T('Hungry', {'No': 'Yes', 'Yes':
-                           T('Alternate',
-                             {'No': 'Yes', 'Yes':
-                              T('Raining', {'No': 'No', 'Yes': 'Yes'})})})})})
 
 __doc__ += """
 [Fig. 18.6]
@@ -751,17 +735,17 @@ def ContinuousXor(n):
 
 #______________________________________________________________________________
 
-def compare(algorithms=[PluralityLearner, NaiveBayesLearner,
+"""def compare(algorithms=[PluralityLearner, NaiveBayesLearner,
                         NearestNeighborLearner, DecisionTreeLearner],
             datasets=[iris, orings, zoo, restaurant, SyntheticRestaurant(20),
                       Majority(7, 100), Parity(7, 100), Xor(100)],
             k=10, trials=1):
-    """Compare various learners on various datasets using cross-validation.
-    Print results as a table."""
+    Compare various learners on various datasets using cross-validation.
+    Print results as a table.
     print_table([[a.__name__.replace('Learner','')] +
                  [cross_validation(a, d, k, trials) for d in datasets]
                  for a in algorithms],
-                header=[''] + [d.name[0:7] for d in datasets], numfmt='%.2f')
+                header=[''] + [d.name[0:7] for d in datasets], numfmt='%.2f')"""
 
 
 if __name__ == '__main__':
