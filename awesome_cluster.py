@@ -92,18 +92,23 @@ def generateRandomSubset(data):
         return cluster_label_dict[cluster]
 
     classifications = []
-    for i in range(10):
+
+    for cc in kmeans.cluster_centers_:
+        predicted = kmeans.predict(cc)
+        label = cluster_label_dict[predicted[0]]
+
+    # for i in range(10):
         correct_class = []
         incorrect_class = []
         for ind, ex in enumerate(data.examples):
             pred = predict(ex)
             actual = ex[-1]
-            if (pred == i):
+            if (pred == label):
                 if (pred == actual):
                     correct_class.append(ind)
                 else:
                     incorrect_class.append(ind)
-        classifications.append({'num':i, 'correct':correct_class, 'incorrect':incorrect_class})
+        classifications.append({'num':label, 'correct':correct_class, 'incorrect':incorrect_class})
     
     # now generate random subset
     for num in classifications:
@@ -123,6 +128,8 @@ def generateRandomSubset(data):
     
     print "Classificatons: "
     pprint(classifications)
+
+
 
 
 
@@ -147,9 +154,9 @@ def plot_clusters():
     plot_pca(data)
 
 
-def writePBM(ex, filename='example.pbm'):
+def writePBM(ex, filename='example'):
     """Takes a binary feature vector and writes a PBM file."""
-    f = file('/Users/SDA/Fall 2013/CS158/kmeanscluster/' + filename, 'w')
+    f = file('/Users/SDA/Fall 2013/CS158/kmeanscluster/' + filename + '.pbm', 'w')
     f.write("P1\n")
     f.write("16 16\n")
     
@@ -162,4 +169,11 @@ def writePBM(ex, filename='example.pbm'):
     
     f.close()
     return f
+
+
+
+
+
+
+
 
