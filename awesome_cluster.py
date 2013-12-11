@@ -7,6 +7,7 @@ from sklearn.preprocessing import scale
 from collections import defaultdict
 from scipy.stats import mode
 
+from kmeansplotting import plot_pca
 
 def semeionData():
     data = DataSet(name="../data/semeion")
@@ -22,7 +23,9 @@ def kmeansLearner(data):
     cluster_label_dict = clusterLabelDict(kmeans, data)
 
     def predict(ex):
-        cluster = kmeans.predict(ex[:-1])[0]   
+        #print ex
+        scaled = scale(ex[:-1])
+        cluster = kmeans.predict(scaled)[0]   
         return cluster_label_dict[cluster]
         
     #  Pass `predict` function to cross_validation later.
@@ -34,7 +37,7 @@ def clusterLabelDict(kmeans, data):
     
     #  Get arbitrary cluster labels for each prediction.
     for row in data.examples:
-        cluster = kmeans.predict(row[:-1])[0]            
+        cluster = kmeans.predict(scale(row[:-1]))[0]            
         cluster_label_dict[cluster].append(row[-1])
     
     #  Reset each key to the MODE of each inner list.
@@ -47,8 +50,33 @@ def clusterLabelDict(kmeans, data):
 
 
 if __name__ == '__main__':
+    pass
+    #data = semeionData()
+    #results = cross_validation(kmeansLearner, data)
+    #print "Kmeans accuracy: ", results
+#data = semeionData()
+#kmeans = kmeansLearner(data)
 
+
+def plot_clusters():
     data = semeionData()
-    kmeans = kmeansLearner(data)
-    results = cross_validation(kmeans, data)
-    print "Kmeans accuracy: ", results
+    # train = [row[:-1] for row in data.examples]
+    # scaled = scale(train)
+    plot_pca(data)
+
+
+def writePBM(ex, filename='example.pbm'):
+    """Takes a binary feature vector and writes a PBM file."""
+    f = file('/Users/SDA/Fall 2013/CS158/kmeanscluster/' + filename, 'w')
+    f.write("P1\n")
+    f.write("16 16\n")
+    
+    split_ex = [ex[i:i+16] for i in range(len(ex)-16) if i%16==0]
+    
+    for row in split_ex:
+        for num in row:
+            f.write(str(int(num)))
+        f.write("\n")
+    
+    f.close()
+    return f
