@@ -77,7 +77,8 @@ def showRepDigits(data):
 
 # For each cluster, generate random subset of both correctly and 
 # incorrectly classified data
-def generateRandomSubset(data):
+def generateRandomSubset():
+    data = DataSet(name="semeion")
     # first train on all the data
     kmeans = KMeans(init='k-means++', n_clusters=10, n_init=10)
     train = [row[:-1] for row in data.examples]
@@ -124,6 +125,15 @@ def generateRandomSubset(data):
     print "Classificatons: "
     pprint(classifications)
 
+    for num in classifications:
+        print num['num']
+        print num['correct_subset']
+        print num['incorrect_subset']
+        for ex in num['correct_subset']:
+            filename = "num"+str(num['num'])+"ex"+str(ex)+"correct.pbm"
+            pdb.set_trace()
+            writePBM(data.examples[ex], filename=filename)
+
 
 
 def clusterLabelDict(kmeans, data):
@@ -162,4 +172,6 @@ def writePBM(ex, filename='example.pbm'):
     
     f.close()
     return f
+
+generateRandomSubset()
 
