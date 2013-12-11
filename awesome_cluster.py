@@ -8,6 +8,9 @@ from collections import defaultdict
 from scipy.stats import mode
 from scipy.spatial.distance import euclidean
 
+import random
+from pprint import pprint
+
 import pdb
 
 from kmeansplotting import plot_pca
@@ -103,7 +106,6 @@ def generateRandomSubset(data):
         classifications.append({'num':i, 'correct':correct_class, 'incorrect':incorrect_class})
     
     # now generate random subset
-    import random
     for num in classifications:
         num_subset = 5
         # for correct
@@ -118,7 +120,9 @@ def generateRandomSubset(data):
             num['incorrect_subset'] = num['incorrect']
 
     # at this point classifications has everything -> can print or write to file
-        
+    
+    print "Classificatons: "
+    pprint(classifications)
 
 
 
@@ -138,20 +142,8 @@ def clusterLabelDict(kmeans, data):
     #  Return a normal dict, not a defaultdict<list>.
     return dict(cluster_label_dict)
 
-
-if __name__ == '__main__':
-    pass
-    #data = semeionData()
-    #results = cross_validation(kmeansLearner, data)
-    #print "Kmeans accuracy: ", results
-#data = semeionData()
-#kmeans = kmeansLearner(data)
-
-
 def plot_clusters():
     data = semeionData()
-    # train = [row[:-1] for row in data.examples]
-    # scaled = scale(train)
     plot_pca(data)
 
 
@@ -170,12 +162,4 @@ def writePBM(ex, filename='example.pbm'):
     
     f.close()
     return f
-    #results = cross_validation(kmeansLearner, data)
-    #print "Kmeans accuracy: ", results
-
-    #showRepDigits(data)
-
-    generateRandomSubset(data)
-
-
 
