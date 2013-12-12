@@ -77,7 +77,8 @@ def showRepDigits(data):
 
 # For each cluster, generate random subset of both correctly and 
 # incorrectly classified data
-def generateRandomSubset(data):
+def generateRandomSubset():
+    data = DataSet(name="semeion")
     # first train on all the data
     kmeans = KMeans(init='k-means++', n_clusters=10, n_init=10)
     train = [row[:-1] for row in data.examples]
@@ -97,6 +98,18 @@ def generateRandomSubset(data):
         predicted = kmeans.predict(cc)
         label = cluster_label_dict[predicted[0]]
 
+        ##  Find closest ex's to each centroid.
+        distance = float('inf')
+        closest = None
+        closest_index = 0
+
+        for i, ex in enumerate(scaled):
+            d = euclidean(ex, cc)
+            if d < distance:
+                closest = ex
+                closest_index = i
+                distance = d
+
     # for i in range(10):
         correct_class = []
         incorrect_class = []
@@ -108,7 +121,8 @@ def generateRandomSubset(data):
                     correct_class.append(ind)
                 else:
                     incorrect_class.append(ind)
-        classifications.append({'num':label, 'correct':correct_class, 'incorrect':incorrect_class})
+        classifications.append({'num':label, 'correct':correct_class,
+            'incorrect':incorrect_class, 'closest':closest_index})
     
     # now generate random subset
     for num in classifications:
@@ -129,6 +143,28 @@ def generateRandomSubset(data):
     print "Classificatons: "
     pprint(classifications)
 
+    ##  Write PBM files.
+    ##  For each centroid, save closest ex, 5 correct, and 5 incorrect ex's.
+
+    for num in classifications:
+        print num['num']
+        print num['correct_subset']
+        print num['incorrect_subset']
+        
+        for ex in num['correct_subset']:
+            filename = "num"+str(num['num'])+"ex"+str(ex)+"correct"
+            # pdb.set_trace()
+            writePBM(data.examples[ex], filename=filename)
+
+        for ex in num['incorrect_subset']:
+            filename = "num"+str(num['num'])+"ex"+str(ex)+"incorrect"
+            writePBM(data.examples[ex], filename=filename)
+
+        closest_ex = num['closest']
+        print closest_ex
+        # closest_ex = closest_ex[0]
+        filename = "num"+str(num['num'])+"ex"+str(closest_ex)+"closest"
+        writePBM(data.examples[closest_ex], filename=filename)
 
 
 
@@ -173,7 +209,5 @@ def writePBM(ex, filename='example'):
 
 
 
-
-
-
+generateRandomSubset()
 
